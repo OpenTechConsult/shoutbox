@@ -19,6 +19,19 @@ class Entry {
             cb();
         });
     }
+
+    static getRange(from, to, cb) {
+        // Redis lrange function is used to retrieve entries
+        db.lrange('entries', from, to, (err, items) => {
+            if (err) return cb(err);
+            let entries = [];
+            items.forEach((item) => {
+                // Decodes entries previously stored as JSON
+                entries.push(JSON.parse(item));
+            });
+            cb(null, entries);
+        });
+    }
     
 }
 module.exports = Entry;
